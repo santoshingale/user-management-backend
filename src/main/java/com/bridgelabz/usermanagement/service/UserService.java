@@ -2,6 +2,7 @@ package com.bridgelabz.usermanagement.service;
 
 import com.bridgelabz.usermanagement.dto.LogInDTO;
 import com.bridgelabz.usermanagement.exception.UserException;
+import com.bridgelabz.usermanagement.model.Email;
 import com.bridgelabz.usermanagement.model.User;
 import com.bridgelabz.usermanagement.repository.UserRepository;
 import com.bridgelabz.usermanagement.util.JWTTokenUtil;
@@ -35,6 +36,10 @@ public class UserService implements IUserService {
 
     @Autowired
     JWTTokenUtil jwtTokenUtil;
+
+    @Autowired
+    RabbitMQSender rabbitMQSender;
+
 
     private ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
@@ -82,23 +87,9 @@ public class UserService implements IUserService {
 
         user.password =passwordEncoder.encode(newPassword);
         userRepository.save(user);
+        final String message = "Your new password is " + newPassword;
 
-        constructEmailMessage(newPassword, "ResetPassword", user.email);
+        rabbitMQSender.send(new Email(user.email,"ResetPassword",message));
         return true;
-    }
-
-    private final void constructEmailMessage(String newPassword, String subject, String email) throws MessagingException {
-        final String confirmationUrl = "Your new password is " + newPassword;
-        MimeMessage message = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message);
-        helper.setTo(email);
-        helper.setText(confirmationUrl);
-        helper.setSubject(subject);
-        executorService.submit(() -> {
-            try {
-                javaMailSender.send(message);
-            } catch (Exception e) {
-            }
-        });
     }
 }

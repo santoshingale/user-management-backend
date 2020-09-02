@@ -6,7 +6,4 @@ public class TokenResponseDTO {
     public TokenResponseDTO(String token) {
         this.token = token;
     }
-
-    public TokenResponseDTO() {
-    }
 }
