@@ -16,6 +16,9 @@ public class UserInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        if (request.getMethod().equals("OPTIONS")) {
+            return true;
+        }
         return (!request.getRequestURL().toString().contains("home")) ? true :
                 (userService.verifyJWTToken(request.getHeader("token"))) ? true : false;
     }

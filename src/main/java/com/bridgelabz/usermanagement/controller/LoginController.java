@@ -1,9 +1,9 @@
 package com.bridgelabz.usermanagement.controller;
 
 import com.bridgelabz.usermanagement.dto.LogInDTO;
-import com.bridgelabz.usermanagement.response.Responce;
 import com.bridgelabz.usermanagement.dto.TokenResponseDTO;
 import com.bridgelabz.usermanagement.model.User;
+import com.bridgelabz.usermanagement.response.Responce;
 import com.bridgelabz.usermanagement.service.IUserService;
 import com.bridgelabz.usermanagement.util.JWTTokenUtil;
 import jakarta.validation.Valid;
@@ -17,8 +17,8 @@ import javax.mail.MessagingException;
 
 @RestController
 @RequestMapping()
-@CrossOrigin("*")
-public class UserController {
+@CrossOrigin(origins = "*", maxAge = 3600)
+public class LoginController {
 
     @Autowired
     IUserService iUserService;

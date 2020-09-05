@@ -1,7 +1,6 @@
 package com.bridgelabz.usermanagement.service;
 
 import com.bridgelabz.usermanagement.dto.LogInDTO;
-import com.bridgelabz.usermanagement.dto.SignUpDTO;
 import com.bridgelabz.usermanagement.model.User;
 
 import javax.mail.MessagingException;

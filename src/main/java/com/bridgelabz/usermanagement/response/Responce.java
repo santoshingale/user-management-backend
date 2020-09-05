@@ -2,7 +2,6 @@ package com.bridgelabz.usermanagement.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
-import lombok.Setter;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
