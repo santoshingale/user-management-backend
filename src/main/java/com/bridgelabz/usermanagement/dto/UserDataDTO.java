@@ -3,6 +3,8 @@ package com.bridgelabz.usermanagement.dto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
+import java.util.Date;
+
 public class UserDataDTO {
     @NotNull
     @Pattern(regexp = "^[a-zA-Z]{3,20}$", message = "Enter Valid FistName")
@@ -50,6 +52,8 @@ public class UserDataDTO {
     @NotNull
     public String profilePic;
 
+    public Date dadateOfBirth;
+
     public boolean addDashboard;
     public boolean deleteDashboard;
     public boolean modifyDashboard;
@@ -79,4 +83,56 @@ public class UserDataDTO {
     public boolean deleteWebPage3;
     public boolean modifyWebPage3;
     public boolean readWebPage3;
+
+
+    public UserDataDTO(String firstname, String middlename, String lastname, String gender, String country, Long phone,
+                       Long phoneext, String email, String address, String username, String password, String role,
+                       String profilePic, Date dadateOfBirth, boolean addDashboard, boolean deleteDashboard, boolean modifyDashboard,
+                       boolean readDashboard, boolean addSettings, boolean deleteSettings, boolean modifySettings, boolean readSettings,
+                       boolean addUsersInformation, boolean deleteUsersInformation, boolean modifyUsersInformation, boolean readUsersInformation,
+                       boolean addWebPage1, boolean deleteWebPage1, boolean modifyWebPage1, boolean readWebPage1, boolean addWebPage2,
+                       boolean deleteWebPage2, boolean modifyWebPage2, boolean readWebPage2, boolean addWebPage3, boolean deleteWebPage3,
+                       boolean modifyWebPage3, boolean readWebPage3) {
+        this.firstname = firstname;
+        this.middlename = middlename;
+        this.lastname = lastname;
+        this.gender = gender;
+        this.country = country;
+        this.phone = phone;
+        this.phoneext = phoneext;
+        this.email = email;
+        this.address = address;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.profilePic = profilePic;
+        this.dadateOfBirth = dadateOfBirth;
+        this.addDashboard = addDashboard;
+        this.deleteDashboard = deleteDashboard;
+        this.modifyDashboard = modifyDashboard;
+        this.readDashboard = readDashboard;
+        this.addSettings = addSettings;
+        this.deleteSettings = deleteSettings;
+        this.modifySettings = modifySettings;
+        this.readSettings = readSettings;
+        this.addUsersInformation = addUsersInformation;
+        this.deleteUsersInformation = deleteUsersInformation;
+        this.modifyUsersInformation = modifyUsersInformation;
+        this.readUsersInformation = readUsersInformation;
+        this.addWebPage1 = addWebPage1;
+        this.deleteWebPage1 = deleteWebPage1;
+        this.modifyWebPage1 = modifyWebPage1;
+        this.readWebPage1 = readWebPage1;
+        this.addWebPage2 = addWebPage2;
+        this.deleteWebPage2 = deleteWebPage2;
+        this.modifyWebPage2 = modifyWebPage2;
+        this.readWebPage2 = readWebPage2;
+        this.addWebPage3 = addWebPage3;
+        this.deleteWebPage3 = deleteWebPage3;
+        this.modifyWebPage3 = modifyWebPage3;
+        this.readWebPage3 = readWebPage3;
+    }
+
+    public UserDataDTO() {
+    }
 }

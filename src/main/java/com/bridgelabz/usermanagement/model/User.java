@@ -16,7 +16,6 @@ public class User {
     public String name;
     public String lName;
     public String password;
-    public boolean valid;
 
     public User() {
     }

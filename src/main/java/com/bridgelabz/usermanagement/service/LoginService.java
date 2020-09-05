@@ -21,7 +21,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 @Service
-public class UserService implements IUserService {
+public class LoginService implements IUserService {
 
     @Autowired
     UserRepository userRepository;

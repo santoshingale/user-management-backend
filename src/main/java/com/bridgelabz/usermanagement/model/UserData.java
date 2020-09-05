@@ -5,10 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @ToString
@@ -22,40 +20,47 @@ public class UserData {
     private String firstname;
     private String middlename;
     private String lastname;
+    private Date dateOfBirth;
     private String gender;
     private String country;
+
+    @Column(unique = true, nullable = false)
     private Long phone;
+    @Column(unique = true)
     private Long phoneext;
+    @Column(unique = true, nullable = false)
     private String email;
     private String address;
+    @Column(unique = true, nullable = false)
     private String username;
     private String password;
     private String role;
     private String profilePic;
-    private boolean addDashboard;
-    private boolean deleteDashboard;
-    private boolean modifyDashboard;
-    private boolean readDashboard;
-    private boolean addSettings;
-    private boolean deleteSettings;
-    private boolean modifySettings;
-    private boolean readSettings;
-    private boolean addUsersInformation;
-    private boolean deleteUsersInformation;
-    private boolean modifyUsersInformation;
-    private boolean readUsersInformation;
-    private boolean addWebPage1;
-    private boolean deleteWebPage1;
-    private boolean modifyWebPage1;
-    private boolean readWebPage1;
-    private boolean addWebPage2;
-    private boolean deleteWebPage2;
-    private boolean modifyWebPage2;
-    private boolean readWebPage2;
-    private boolean addWebPage3;
-    private boolean deleteWebPage3;
-    private boolean modifyWebPage3;
-    private boolean readWebPage3;
+
+    @OneToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "dashboard_id", referencedColumnName = "id")
+    private DashboardPermissions dashboardPermissions;
+
+    @OneToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "settings_id", referencedColumnName = "id")
+    private SettingsPermissions settingsPermissions;
+
+    @OneToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "user_info_id", referencedColumnName = "id")
+    private UsersInfoPermission usersInfoPermission;
+
+    @OneToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "webpage1_id", referencedColumnName = "id")
+    private WebPage1Permission webPage1Permission;
+
+    @OneToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "webpage2_id", referencedColumnName = "id")
+    private WebPage2Permission webPage2Permission;
+
+    @OneToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "webpage3_id", referencedColumnName = "id")
+    private WebPage3Permission webPage3Permission;
+
 
     public UserData(UserDataDTO userDataDTO) {
         this.firstname = userDataDTO.firstname;
@@ -70,30 +75,7 @@ public class UserData {
         this.username = userDataDTO.username;
         this.password = userDataDTO.password;
         this.role = userDataDTO.role;
+        this.dateOfBirth = userDataDTO.dadateOfBirth;
         this.profilePic = userDataDTO.profilePic;
-        this.addDashboard = userDataDTO.addDashboard;
-        this.deleteDashboard = userDataDTO.deleteDashboard;
-        this.modifyDashboard = userDataDTO.modifyDashboard;
-        this.readDashboard = userDataDTO.readDashboard;
-        this.addSettings = userDataDTO.addSettings;
-        this.deleteSettings = userDataDTO.deleteSettings;
-        this.modifySettings = userDataDTO.modifySettings;
-        this.readSettings = userDataDTO.readSettings;
-        this.addUsersInformation = userDataDTO.addUsersInformation;
-        this.deleteUsersInformation = userDataDTO.deleteUsersInformation;
-        this.modifyUsersInformation = userDataDTO.modifyUsersInformation;
-        this.readUsersInformation = userDataDTO.readUsersInformation;
-        this.addWebPage1 = userDataDTO.addWebPage1;
-        this.deleteWebPage1 = userDataDTO.deleteWebPage1;
-        this.modifyWebPage1 = userDataDTO.modifyWebPage1;
-        this.readWebPage1 = userDataDTO.readWebPage1;
-        this.addWebPage2 = userDataDTO.addWebPage2;
-        this.deleteWebPage2 = userDataDTO.deleteWebPage2;
-        this.modifyWebPage2 = userDataDTO.modifyWebPage2;
-        this.readWebPage2 = userDataDTO.readWebPage2;
-        this.addWebPage3 = userDataDTO.addWebPage3;
-        this.deleteWebPage3 = userDataDTO.deleteWebPage3;
-        this.modifyWebPage3 = userDataDTO.modifyWebPage3;
-        this.readWebPage3 = userDataDTO.readWebPage3;
     }
 }
