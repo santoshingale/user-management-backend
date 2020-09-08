@@ -14,6 +14,6 @@ public class RegisterException extends RuntimeException {
     }
 
     public enum ExceptionType {
-        Email_ALREADY_EXIST, NUMBER_ALREADY_EXIST,
+        Email_ALREADY_EXIST, NUMBER_ALREADY_EXIST, INVALID_FILE_NAME, FILE_NOT_STORE, DIRECTORY_NOT_FOUND,
     }
 }

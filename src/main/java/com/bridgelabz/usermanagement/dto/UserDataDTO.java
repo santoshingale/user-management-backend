@@ -49,8 +49,6 @@ public class UserDataDTO {
     @Pattern(regexp = " ^(?:User|Admin)$", message = "Enter Valid role")
     public String role;
 
-    @NotNull
-    public String profilePic;
 
     public Date dadateOfBirth;
 
@@ -87,7 +85,7 @@ public class UserDataDTO {
 
     public UserDataDTO(String firstname, String middlename, String lastname, String gender, String country, Long phone,
                        Long phoneext, String email, String address, String username, String password, String role,
-                       String profilePic, Date dadateOfBirth, boolean addDashboard, boolean deleteDashboard, boolean modifyDashboard,
+                       Date dadateOfBirth, boolean addDashboard, boolean deleteDashboard, boolean modifyDashboard,
                        boolean readDashboard, boolean addSettings, boolean deleteSettings, boolean modifySettings, boolean readSettings,
                        boolean addUsersInformation, boolean deleteUsersInformation, boolean modifyUsersInformation, boolean readUsersInformation,
                        boolean addWebPage1, boolean deleteWebPage1, boolean modifyWebPage1, boolean readWebPage1, boolean addWebPage2,
@@ -105,7 +103,6 @@ public class UserDataDTO {
         this.username = username;
         this.password = password;
         this.role = role;
-        this.profilePic = profilePic;
         this.dadateOfBirth = dadateOfBirth;
         this.addDashboard = addDashboard;
         this.deleteDashboard = deleteDashboard;

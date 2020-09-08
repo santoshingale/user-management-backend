@@ -37,6 +37,8 @@ dependencies {
     compile group: 'org.springframework', name: 'spring-core', version: '5.2.5.RELEASE'
     compile group: 'jakarta.validation', name: 'jakarta.validation-api', version: '3.0.0'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-amqp', version: '2.3.3.RELEASE'
+    compile group: 'com.google.firebase', name: 'firebase-admin', version: '6.14.0'
+    compile group: 'commons-io', name: 'commons-io', version: '2.5'
 }
 
 test {

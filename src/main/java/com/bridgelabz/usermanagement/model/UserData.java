@@ -38,29 +38,8 @@ public class UserData {
     private String profilePic;
 
     @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "dashboard_id", referencedColumnName = "id")
-    private DashboardPermissions dashboardPermissions;
-
-    @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "settings_id", referencedColumnName = "id")
-    private SettingsPermissions settingsPermissions;
-
-    @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "user_info_id", referencedColumnName = "id")
-    private UsersInfoPermission usersInfoPermission;
-
-    @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "webpage1_id", referencedColumnName = "id")
-    private WebPage1Permission webPage1Permission;
-
-    @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "webpage2_id", referencedColumnName = "id")
-    private WebPage2Permission webPage2Permission;
-
-    @OneToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "webpage3_id", referencedColumnName = "id")
-    private WebPage3Permission webPage3Permission;
-
+    @JoinColumn(name = "permission_id", referencedColumnName = "id")
+    private UserPermission userPermission;
 
     public UserData(UserDataDTO userDataDTO) {
         this.firstname = userDataDTO.firstname;
@@ -76,6 +55,5 @@ public class UserData {
         this.password = userDataDTO.password;
         this.role = userDataDTO.role;
         this.dateOfBirth = userDataDTO.dadateOfBirth;
-        this.profilePic = userDataDTO.profilePic;
     }
 }
