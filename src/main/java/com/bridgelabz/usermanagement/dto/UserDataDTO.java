@@ -3,6 +3,7 @@ package com.bridgelabz.usermanagement.dto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
+import javax.xml.crypto.Data;
 import java.util.Date;
 
 public class UserDataDTO {
@@ -49,8 +50,7 @@ public class UserDataDTO {
     @Pattern(regexp = " ^(?:User|Admin)$", message = "Enter Valid role")
     public String role;
 
-
-    public Date dadateOfBirth;
+    public Date dateOfBirth;
 
     public boolean addDashboard;
     public boolean deleteDashboard;
@@ -85,12 +85,12 @@ public class UserDataDTO {
 
     public UserDataDTO(String firstname, String middlename, String lastname, String gender, String country, Long phone,
                        Long phoneext, String email, String address, String username, String password, String role,
-                       Date dadateOfBirth, boolean addDashboard, boolean deleteDashboard, boolean modifyDashboard,
+                       boolean addDashboard, boolean deleteDashboard, boolean modifyDashboard,
                        boolean readDashboard, boolean addSettings, boolean deleteSettings, boolean modifySettings, boolean readSettings,
                        boolean addUsersInformation, boolean deleteUsersInformation, boolean modifyUsersInformation, boolean readUsersInformation,
                        boolean addWebPage1, boolean deleteWebPage1, boolean modifyWebPage1, boolean readWebPage1, boolean addWebPage2,
                        boolean deleteWebPage2, boolean modifyWebPage2, boolean readWebPage2, boolean addWebPage3, boolean deleteWebPage3,
-                       boolean modifyWebPage3, boolean readWebPage3) {
+                       boolean modifyWebPage3, boolean readWebPage3 , Date dateOfBirth) {
         this.firstname = firstname;
         this.middlename = middlename;
         this.lastname = lastname;
@@ -103,7 +103,6 @@ public class UserDataDTO {
         this.username = username;
         this.password = password;
         this.role = role;
-        this.dadateOfBirth = dadateOfBirth;
         this.addDashboard = addDashboard;
         this.deleteDashboard = deleteDashboard;
         this.modifyDashboard = modifyDashboard;
@@ -128,6 +127,7 @@ public class UserDataDTO {
         this.deleteWebPage3 = deleteWebPage3;
         this.modifyWebPage3 = modifyWebPage3;
         this.readWebPage3 = readWebPage3;
+        this.dateOfBirth = dateOfBirth;
     }
 
     public UserDataDTO() {

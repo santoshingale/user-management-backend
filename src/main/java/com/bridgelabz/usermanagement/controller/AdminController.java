@@ -1,7 +1,6 @@
 package com.bridgelabz.usermanagement.controller;
 
 import com.bridgelabz.usermanagement.dto.UserDataDTO;
-import com.bridgelabz.usermanagement.model.UserData;
 import com.bridgelabz.usermanagement.response.Responce;
 import com.bridgelabz.usermanagement.service.UserDataService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,13 +30,6 @@ public class AdminController {
         }
         UserDataDTO userDataDTO = new ObjectMapper().readValue(register, UserDataDTO.class);
 
-        UserData save = userDataService.register(userDataDTO, profilePic);
-        return new ResponseEntity(new Responce(HttpStatus.OK.value(), "sucessully submited", save), HttpStatus.OK);
+        return userDataService.register(userDataDTO, profilePic);
     }
-
-//    @PostMapping("/home/image/upload")
-//    ResponseEntity<Responce> uploadProfilePic( @RequestPart("file") MultipartFile file  ) {
-//        String s = imageUpload.uploadImage(file);
-//        return new ResponseEntity(new Responce(HttpStatus.OK.value(), "sucessully submited", s), HttpStatus.OK);
-//    }
 }

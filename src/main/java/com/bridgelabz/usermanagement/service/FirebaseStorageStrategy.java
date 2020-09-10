@@ -3,14 +3,21 @@ package com.bridgelabz.usermanagement.service;
 import com.bridgelabz.usermanagement.helper.FirebaseCredential;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.cloud.ReadChannel;
 import com.google.cloud.storage.*;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import java.io.*;
+import java.nio.channels.Channels;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Date;
@@ -53,28 +60,27 @@ public class FirebaseStorageStrategy {
     }
 
 
-//    public ResponseEntity<Object> downloadFile(String fileName, HttpServletRequest request) throws Exception {
-//        Storage storage = storageOptions.getService();
-//
-//        Blob blob = storage.get(BlobId.of(bucketName, fileName));
-//        ReadChannel reader = blob.reader();
-//        InputStream inputStream = Channels.newInputStream(reader);
-//
-//        byte[] content = null;
-//        log.info("File downloaded successfully.");
-//
-//        content = IOUtils.toByteArray(inputStream);
-//
-//        final ByteArrayResource byteArrayResource = new ByteArrayResource(content);
-//
-//        return ResponseEntity
-//                .ok()
-//                .contentLength(content.length)
-//                .header("Content-type", "application/octet-stream")
-//                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
-//                .body(byteArrayResource);
-//
-//    }
+    public ResponseEntity<Object> downloadFile(String fileName) throws Exception {
+        Storage storage = storageOptions.getService();
+
+        Blob blob = storage.get(BlobId.of(bucketName, fileName));
+        ReadChannel reader = blob.reader();
+        InputStream inputStream = Channels.newInputStream(reader);
+
+        byte[] content = null;
+
+        content = IOUtils.toByteArray(inputStream);
+
+        final ByteArrayResource byteArrayResource = new ByteArrayResource(content);
+
+        return ResponseEntity
+                .ok()
+                .contentLength(content.length)
+                .header("Content-type", "application/octet-stream")
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                .body(byteArrayResource);
+
+    }
 
 
     private File convertMultiPartToFile(MultipartFile file) throws IOException {

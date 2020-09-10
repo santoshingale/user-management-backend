@@ -3,6 +3,7 @@ package com.bridgelabz.usermanagement.controller;
 import com.bridgelabz.usermanagement.dto.LogInDTO;
 import com.bridgelabz.usermanagement.dto.TokenResponseDTO;
 import com.bridgelabz.usermanagement.model.User;
+import com.bridgelabz.usermanagement.model.UserData;
 import com.bridgelabz.usermanagement.response.Responce;
 import com.bridgelabz.usermanagement.service.IUserService;
 import com.bridgelabz.usermanagement.util.JWTTokenUtil;
@@ -23,19 +24,13 @@ public class LoginController {
     @Autowired
     IUserService iUserService;
 
-    @Autowired
-    JWTTokenUtil jwtTokenUtil;
-
     @PostMapping("/login")
     ResponseEntity<Responce> logInUser(@Valid @RequestBody LogInDTO logInDTO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<Responce>(new Responce(HttpStatus.UNAUTHORIZED.value()
                     , bindingResult.getFieldErrors().get(0).getDefaultMessage()), HttpStatus.UNAUTHORIZED);
         }
-        User user = iUserService.login(logInDTO);
-        String token = jwtTokenUtil.generateToken(user);
-
-        return new ResponseEntity(new Responce(HttpStatus.OK.value(), "Successfully login", new TokenResponseDTO(token)), HttpStatus.OK);
+        return iUserService.login(logInDTO);
     }
 
     @GetMapping("/home")

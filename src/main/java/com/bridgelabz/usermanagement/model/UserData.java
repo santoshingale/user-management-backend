@@ -1,6 +1,10 @@
 package com.bridgelabz.usermanagement.model;
 
 import com.bridgelabz.usermanagement.dto.UserDataDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
@@ -11,6 +15,7 @@ import java.util.Date;
 @Entity
 @ToString
 @Setter
+@Getter
 @NoArgsConstructor
 public class UserData {
 
@@ -33,11 +38,15 @@ public class UserData {
     private String address;
     @Column(unique = true, nullable = false)
     private String username;
+
+    @JsonIgnore
     private String password;
+
     private String role;
     private String profilePic;
 
-    @OneToOne(cascade = CascadeType.MERGE)
+    @JsonProperty
+    @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(name = "permission_id", referencedColumnName = "id")
     private UserPermission userPermission;
 
@@ -54,6 +63,6 @@ public class UserData {
         this.username = userDataDTO.username;
         this.password = userDataDTO.password;
         this.role = userDataDTO.role;
-        this.dateOfBirth = userDataDTO.dadateOfBirth;
+        this.dateOfBirth = userDataDTO.dateOfBirth;
     }
 }

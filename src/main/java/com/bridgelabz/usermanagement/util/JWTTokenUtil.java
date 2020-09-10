@@ -1,6 +1,7 @@
 package com.bridgelabz.usermanagement.util;
 
 import com.bridgelabz.usermanagement.model.User;
+import com.bridgelabz.usermanagement.model.UserData;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -42,9 +43,9 @@ public class JWTTokenUtil implements Serializable {
         return expiration.before(new Date());
     }
 
-    public String generateToken(User user) {
+    public String generateToken(UserData user) {
         Map<String, Object> claims = new HashMap<>();
-        return doGenerateToken(claims, user.email);
+        return doGenerateToken(claims, user.getEmail());
     }
 
     private String doGenerateToken(Map<String, Object> claims, String subject) {

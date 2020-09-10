@@ -1,14 +1,17 @@
 package com.bridgelabz.usermanagement.service;
 
 import com.bridgelabz.usermanagement.dto.LogInDTO;
+import com.bridgelabz.usermanagement.dto.TokenResponseDTO;
 import com.bridgelabz.usermanagement.exception.LoginException;
 import com.bridgelabz.usermanagement.model.Email;
-import com.bridgelabz.usermanagement.model.User;
-import com.bridgelabz.usermanagement.repository.UserRepository;
+import com.bridgelabz.usermanagement.model.UserData;
+import com.bridgelabz.usermanagement.repository.UserDataRepository;
+import com.bridgelabz.usermanagement.response.Responce;
 import com.bridgelabz.usermanagement.util.JWTTokenUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,7 +27,7 @@ import java.util.concurrent.ScheduledExecutorService;
 public class LoginService implements IUserService {
 
     @Autowired
-    UserRepository userRepository;
+    UserDataRepository userDataRepository;
 
     @Autowired
     JavaMailSender javaMailSender;
@@ -42,13 +45,15 @@ public class LoginService implements IUserService {
     private ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     @Override
-    public User login(LogInDTO logInDTO) {
-        Optional<User> byEmail = userRepository.findByEmail(logInDTO.email);
+    public ResponseEntity login(LogInDTO logInDTO) {
+        Optional<UserData> byEmail = userDataRepository.findByEmail(logInDTO.email);
         if (!byEmail.isPresent()) {
-            throw new LoginException("email not registered with us", LoginException.ExceptionType.WRONG_EMAIL, HttpStatus.UNAUTHORIZED.value());
+            throw new LoginException("Email not registered", LoginException.ExceptionType.WRONG_EMAIL, HttpStatus.UNAUTHORIZED.value());
         }
-        if (passwordEncoder.matches(logInDTO.password, byEmail.get().password)) {
-            return byEmail.get();
+        if (passwordEncoder.matches(logInDTO.password, byEmail.get().getPassword())) {
+            UserData userData = byEmail.get();
+            String token = jwtTokenUtil.generateToken(userData);
+            return new ResponseEntity(new Responce(HttpStatus.OK.value(), "Successfully login", new TokenResponseDTO(token)), HttpStatus.OK);
         }
         throw new LoginException("Incorrect password", LoginException.ExceptionType.WRONG_EMAIL, HttpStatus.UNAUTHORIZED.value());
     }
@@ -69,7 +74,7 @@ public class LoginService implements IUserService {
                 System.out.println("JWT Token has expired");
             }
         }
-        if (userEmail != null && userRepository.findByEmail(userEmail).isPresent() && expirationTime.after(new Date())) {
+        if (userEmail != null && userDataRepository.findByEmail(userEmail).isPresent() && expirationTime.after(new Date())) {
             return true;
         }
         throw new LoginException("Invalid token", LoginException.ExceptionType.INVALIDE_TOKEN, HttpStatus.UNAUTHORIZED.value());
@@ -77,18 +82,18 @@ public class LoginService implements IUserService {
 
     @Override
     public boolean resetPassword(String email) throws MessagingException {
-        Optional<User> byEmail = userRepository.findByEmail(email);
+        Optional<UserData> byEmail = userDataRepository.findByEmail(email);
         if (!byEmail.isPresent()) {
             throw new LoginException("email not registered with us", LoginException.ExceptionType.WRONG_EMAIL, HttpStatus.UNAUTHORIZED.value());
         }
-        User user = byEmail.get();
+        UserData userData = byEmail.get();
         final String newPassword = UUID.randomUUID().toString().substring(1, 6);
 
-        user.password = passwordEncoder.encode(newPassword);
-        userRepository.save(user);
+        userData.setPassword(passwordEncoder.encode(newPassword));
+        userDataRepository.save(userData);
         final String message = "Your new password is " + newPassword;
 
-        rabbitMQSender.send(new Email(user.email, "ResetPassword", message));
+        rabbitMQSender.send(new Email(userData.getEmail(), "ResetPassword", message));
         return true;
     }
 }
