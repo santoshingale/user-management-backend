@@ -33,11 +33,6 @@ public class LoginController {
         return iUserService.login(logInDTO);
     }
 
-    @GetMapping("/home")
-    ResponseEntity getHomePage() {
-        return new ResponseEntity(new Responce(HttpStatus.OK.value(), "home page"), HttpStatus.OK);
-    }
-
     @GetMapping("/forgetpassword")
     ResponseEntity forgetPassword(@RequestParam("email") String email) throws MessagingException {
         if (!email.isEmpty()) {

@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 @Service
 public class UserDataService {
@@ -39,7 +40,6 @@ public class UserDataService {
         if (userDataRepository.findByPhoneext(userDataDTO.phoneext).isPresent()) {
             throw new RegisterException("phone not registered with us", RegisterException.ExceptionType.NUMBER_ALREADY_EXIST, HttpStatus.BAD_REQUEST.value());
         }
-
         return new ResponseEntity(new Responce(HttpStatus.OK.value(), "sucessully submited", saveUserData(userDataDTO, profilePic)), HttpStatus.OK);
     }
 
@@ -51,6 +51,7 @@ public class UserDataService {
         userData.setProfilePic(profilePic);
         userData.setUserPermission(userPermission);
         userData.setPassword(passwordEncoder.encode(userDataDTO.password));
+        userData.setRegistrationDate(LocalDateTime.now());
         return userDataRepository.save(userData);
     }
 

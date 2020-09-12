@@ -1,10 +1,14 @@
 package com.bridgelabz.usermanagement.model;
 
 import com.bridgelabz.usermanagement.dto.UserDataDTO;
+import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 @Entity
+@ToString
+@Data
 public class UserPermission {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

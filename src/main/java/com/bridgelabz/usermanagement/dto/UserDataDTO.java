@@ -132,4 +132,47 @@ public class UserDataDTO {
 
     public UserDataDTO() {
     }
+
+    @Override
+    public String toString() {
+        return "UserDataDTO{" +
+                "firstname='" + firstname + '\'' +
+                ", middlename='" + middlename + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", gender='" + gender + '\'' +
+                ", country='" + country + '\'' +
+                ", phone=" + phone +
+                ", phoneext=" + phoneext +
+                ", email='" + email + '\'' +
+                ", address='" + address + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", addDashboard=" + addDashboard +
+                ", deleteDashboard=" + deleteDashboard +
+                ", modifyDashboard=" + modifyDashboard +
+                ", readDashboard=" + readDashboard +
+                ", addSettings=" + addSettings +
+                ", deleteSettings=" + deleteSettings +
+                ", modifySettings=" + modifySettings +
+                ", readSettings=" + readSettings +
+                ", addUsersInformation=" + addUsersInformation +
+                ", deleteUsersInformation=" + deleteUsersInformation +
+                ", modifyUsersInformation=" + modifyUsersInformation +
+                ", readUsersInformation=" + readUsersInformation +
+                ", addWebPage1=" + addWebPage1 +
+                ", deleteWebPage1=" + deleteWebPage1 +
+                ", modifyWebPage1=" + modifyWebPage1 +
+                ", readWebPage1=" + readWebPage1 +
+                ", addWebPage2=" + addWebPage2 +
+                ", deleteWebPage2=" + deleteWebPage2 +
+                ", modifyWebPage2=" + modifyWebPage2 +
+                ", readWebPage2=" + readWebPage2 +
+                ", addWebPage3=" + addWebPage3 +
+                ", deleteWebPage3=" + deleteWebPage3 +
+                ", modifyWebPage3=" + modifyWebPage3 +
+                ", readWebPage3=" + readWebPage3 +
+                '}';
+    }
 }

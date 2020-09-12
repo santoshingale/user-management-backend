@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
@@ -51,10 +52,16 @@ public class LoginService implements IUserService {
             throw new LoginException("Email not registered", LoginException.ExceptionType.WRONG_EMAIL, HttpStatus.UNAUTHORIZED.value());
         }
         if (passwordEncoder.matches(logInDTO.password, byEmail.get().getPassword())) {
+            if (byEmail.get().getWorongLoginAttempt() > 2) {
+                throw new LoginException("pls reset your password", LoginException.ExceptionType.RESET_PASSWORD, HttpStatus.UNAUTHORIZED.value());
+            }
             UserData userData = byEmail.get();
             String token = jwtTokenUtil.generateToken(userData);
+            userDataRepository.updateLoginDetails(byEmail.get().getId(), LocalDateTime.now());
             return new ResponseEntity(new Responce(HttpStatus.OK.value(), "Successfully login", new TokenResponseDTO(token)), HttpStatus.OK);
         }
+
+        userDataRepository.updateWrongAttempts(byEmail.get().getId(), byEmail.get().getWorongLoginAttempt() + 1);
         throw new LoginException("Incorrect password", LoginException.ExceptionType.WRONG_EMAIL, HttpStatus.UNAUTHORIZED.value());
     }
 

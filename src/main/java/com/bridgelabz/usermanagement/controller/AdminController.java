@@ -22,14 +22,14 @@ public class AdminController {
     @Autowired
     private UserDataService userDataService;
 
-    @PostMapping("/home/register")
-    ResponseEntity<Responce> addUser(@Valid @RequestPart("register") String register, @RequestPart("profilePic") MultipartFile profilePic, BindingResult bindingResult) throws IOException {
+    @PostMapping(value = "/home/register" , consumes = {"multipart/form-data"})
+    @ResponseBody
+    ResponseEntity<Responce> addUser(@Valid @RequestPart("register") UserDataDTO update, @RequestPart("profilePic") MultipartFile profilePic, BindingResult bindingResult) throws IOException {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<Responce>(new Responce(HttpStatus.UNAUTHORIZED.value()
                     , bindingResult.getFieldErrors().get(0).getDefaultMessage()), HttpStatus.UNAUTHORIZED);
         }
-        UserDataDTO userDataDTO = new ObjectMapper().readValue(register, UserDataDTO.class);
-
-        return userDataService.register(userDataDTO, profilePic);
+        return userDataService.register(update, profilePic);
     }
+
 }
