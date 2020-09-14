@@ -84,7 +84,7 @@ public class LoginService implements IUserService {
         if (userEmail != null && userDataRepository.findByEmail(userEmail).isPresent() && expirationTime.after(new Date())) {
             return true;
         }
-        throw new LoginException("Invalid token", LoginException.ExceptionType.INVALIDE_TOKEN, HttpStatus.UNAUTHORIZED.value());
+        throw new LoginException("Invalid token", LoginException.ExceptionType.INVALID_TOKEN, HttpStatus.UNAUTHORIZED.value());
     }
 
     @Override

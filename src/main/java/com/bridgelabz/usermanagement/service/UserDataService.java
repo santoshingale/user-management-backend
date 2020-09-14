@@ -17,30 +17,49 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class UserDataService {
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
     @Autowired
     private UserDataRepository userDataRepository;
     @Autowired
     private UserPermissionRepo userPermissionRepo;
     @Autowired
     private FirebaseStorageStrategy firebaseStorageStrategy;
-    @Autowired
-    PasswordEncoder passwordEncoder;
 
     public ResponseEntity register(UserDataDTO userDataDTO, MultipartFile profilePic) throws IOException {
         if (userDataRepository.findByEmail(userDataDTO.email).isPresent()) {
-            throw new RegisterException("email not registered with us", RegisterException.ExceptionType.Email_ALREADY_EXIST, HttpStatus.BAD_REQUEST.value());
+            throw new RegisterException("email already registered with us", RegisterException.ExceptionType.Email_ALREADY_EXIST, HttpStatus.BAD_REQUEST.value());
         }
         if (userDataRepository.findByPhone(userDataDTO.phone).isPresent()) {
-            throw new RegisterException("phone not registered with us", RegisterException.ExceptionType.NUMBER_ALREADY_EXIST, HttpStatus.BAD_REQUEST.value());
+            throw new RegisterException("phone already registered with us", RegisterException.ExceptionType.NUMBER_ALREADY_EXIST, HttpStatus.BAD_REQUEST.value());
         }
         if (userDataRepository.findByPhoneext(userDataDTO.phoneext).isPresent()) {
-            throw new RegisterException("phone not registered with us", RegisterException.ExceptionType.NUMBER_ALREADY_EXIST, HttpStatus.BAD_REQUEST.value());
+            throw new RegisterException("phone already registered with us", RegisterException.ExceptionType.NUMBER_ALREADY_EXIST, HttpStatus.BAD_REQUEST.value());
         }
         return new ResponseEntity(new Responce(HttpStatus.OK.value(), "sucessully submited", saveUserData(userDataDTO, profilePic)), HttpStatus.OK);
+    }
+
+    public ResponseEntity update(UserData userData, MultipartFile... profilePic) throws IOException {
+
+        Optional<UserData> byId = userDataRepository.findById(userData.getId());
+        if (byId.isEmpty()) {
+            throw new RegisterException("email not registered with us", RegisterException.ExceptionType.INVALID_RECORD, HttpStatus.BAD_REQUEST.value());
+        }
+        UserData userData1 = byId.get();
+        userData.setRegistrationDate(userData1.getRegistrationDate());
+        userData.setProfilePic(userData1.getProfilePic());
+        userData.setLastUpdate(LocalDateTime.now());
+        if (profilePic.length != 0) {
+            userData.setProfilePic(firebaseStorageStrategy.uploadFile(profilePic[0]));
+        }
+        userDataRepository.deleteById(userData.getId());
+        userPermissionRepo.deleteById(userData.getUserPermission().getId());
+        return new ResponseEntity(new Responce(HttpStatus.OK.value(), "sucessully submited", userDataRepository.save(userData)), HttpStatus.OK);
     }
 
     @Transactional
@@ -76,6 +95,11 @@ public class UserDataService {
                 , "sucessully", userDataRepository.getUserDataForListWithSearch(((pagenumber * listSize) - listSize), listSize, searchKey)), HttpStatus.OK);
     }
 
+    public ResponseEntity getRecentRegistrationList() {
+        return new ResponseEntity(new Responce(HttpStatus.OK.value()
+                , "sucessully", userDataRepository.getRecentTegistration()), HttpStatus.OK);
+    }
+
     public ResponseEntity getProfilePic(String imageName) throws Exception {
         return firebaseStorageStrategy.downloadFile(imageName);
     }
@@ -85,4 +109,6 @@ public class UserDataService {
         return new ResponseEntity(new Responce(HttpStatus.OK.value()
                 , "user deleted successfully"), HttpStatus.OK);
     }
+
+
 }

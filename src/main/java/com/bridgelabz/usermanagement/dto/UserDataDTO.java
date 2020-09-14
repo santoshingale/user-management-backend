@@ -3,7 +3,6 @@ package com.bridgelabz.usermanagement.dto;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
-import javax.xml.crypto.Data;
 import java.util.Date;
 
 public class UserDataDTO {
@@ -90,7 +89,7 @@ public class UserDataDTO {
                        boolean addUsersInformation, boolean deleteUsersInformation, boolean modifyUsersInformation, boolean readUsersInformation,
                        boolean addWebPage1, boolean deleteWebPage1, boolean modifyWebPage1, boolean readWebPage1, boolean addWebPage2,
                        boolean deleteWebPage2, boolean modifyWebPage2, boolean readWebPage2, boolean addWebPage3, boolean deleteWebPage3,
-                       boolean modifyWebPage3, boolean readWebPage3 , Date dateOfBirth) {
+                       boolean modifyWebPage3, boolean readWebPage3, Date dateOfBirth) {
         this.firstname = firstname;
         this.middlename = middlename;
         this.lastname = lastname;

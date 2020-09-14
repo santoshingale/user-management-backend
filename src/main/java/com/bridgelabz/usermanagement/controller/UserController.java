@@ -1,10 +1,10 @@
 package com.bridgelabz.usermanagement.controller;
 
 
-import com.bridgelabz.usermanagement.dto.UserDataDTO;
+import com.bridgelabz.usermanagement.model.UserData;
+import com.bridgelabz.usermanagement.repository.UserDataRepository;
 import com.bridgelabz.usermanagement.response.Responce;
 import com.bridgelabz.usermanagement.service.UserDataService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +22,9 @@ public class UserController {
 
     @Autowired
     UserDataService userDataService;
+
+    @Autowired
+    UserDataRepository userDataRepository;
 
     @GetMapping("/count")
     public ResponseEntity getNoOfUsers() {
@@ -43,6 +46,11 @@ public class UserController {
         return userDataService.getUserListBySearchKey(listLength, pageNumber, searchKey);
     }
 
+    @GetMapping(value = "/recent-registration")
+    public ResponseEntity getUserListByDesc() {
+        return userDataService.getRecentRegistrationList();
+    }
+
     @GetMapping(value = "/image/{imageName}")
     public ResponseEntity getUserListBySearch(@PathVariable String imageName) throws Exception {
         return userDataService.getProfilePic(imageName);
@@ -53,14 +61,28 @@ public class UserController {
         return userDataService.deleteUser(id);
     }
 
-    @PostMapping("/update")
-     ResponseEntity<Responce> updateUserData(@Valid @RequestPart("update") String update, @RequestPart("profilePic") MultipartFile profilePic, BindingResult bindingResult) throws IOException {
+    @PostMapping(value = "/update")
+    @ResponseBody
+    public ResponseEntity<Responce> updateUser(@Valid @RequestPart("update") UserData userData, BindingResult bindingResult) throws IOException {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<Responce>(new Responce(HttpStatus.UNAUTHORIZED.value()
                     , bindingResult.getFieldErrors().get(0).getDefaultMessage()), HttpStatus.UNAUTHORIZED);
         }
-        UserDataDTO userDataDTO = new ObjectMapper().readValue(update, UserDataDTO.class);
+        return userDataService.update(userData);
+    }
 
-        return userDataService.register(userDataDTO, profilePic);
+    @PostMapping(value = "/update", consumes = {"multipart/form-data"})
+    @ResponseBody
+    public ResponseEntity<Responce> updateUserWIthProfilePic(@Valid @RequestPart("update") UserData userData, @RequestPart("profilePic") MultipartFile profilePic, BindingResult bindingResult) throws IOException {
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity<Responce>(new Responce(HttpStatus.UNAUTHORIZED.value()
+                    , bindingResult.getFieldErrors().get(0).getDefaultMessage()), HttpStatus.UNAUTHORIZED);
+        }
+        return userDataService.update(userData, profilePic);
+    }
+
+    @GetMapping("/registation/month/count")
+    public ResponseEntity<Responce> getRegistrationInMonth() {
+        return userDataRepository.getMonthRegistrationRecords();
     }
 }

@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.nio.channels.Channels;
 import java.nio.file.Files;
@@ -27,11 +26,10 @@ import java.util.Objects;
 public class FirebaseStorageStrategy {
 
     public String projectId;
-    private StorageOptions storageOptions;
-    private String bucketName;
-
     @Autowired
     Environment environment;
+    private StorageOptions storageOptions;
+    private String bucketName;
 
     @PostConstruct
     private void initializeFirebase() throws Exception {

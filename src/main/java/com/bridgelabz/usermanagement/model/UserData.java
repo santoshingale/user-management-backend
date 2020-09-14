@@ -78,7 +78,7 @@ public class UserData {
 
     private LocalDateTime lastLogin;
 
-    @Column(columnDefinition="int default 0")
+    @Column(columnDefinition = "int default 0")
     private Integer worongLoginAttempt;
 
     @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)

@@ -47,4 +47,10 @@ public interface UserDataRepository extends JpaRepository<UserData, Long> {
     @Transactional
     @Query(value = "update user_data set worong_login_attempt = 0, last_login = :loginTime where id = :id", nativeQuery = true)
     void updateLoginDetails(@Param("id") Long id, @Param("loginTime") LocalDateTime loginTime);
+
+    @Query(value = "SELECT count(*),MONTH(registration_date),year(registration_date) FROM userDetails.user_data WHERE YEAR(registration_date) = 2020 GROUP BY MONTH(registration_date),year(registration_date)", nativeQuery = true)
+    List getMonthRegistrationRecords();
+
+    @Query(value = "SELECT * FROM user_data ORDER BY registration_date DESC LIMIT 10", nativeQuery = true)
+    List<UserData> getRecentTegistration();
 }

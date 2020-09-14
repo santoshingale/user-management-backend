@@ -18,7 +18,7 @@ public class DashBoard {
     UserDataService userDataService;
 
     @GetMapping(value = "", params = "status")
-        public ResponseEntity getNoOfUsers (@RequestParam String status){
-            return dashboardService.getActiveUser(status);
-        }
+    public ResponseEntity getNoOfUsers(@RequestParam String status) {
+        return dashboardService.getActiveUser(status);
+    }
 }

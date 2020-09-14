@@ -13,6 +13,6 @@ public class LoginException extends RuntimeException {
     }
 
     public enum ExceptionType {
-        WRONG_EMAIL, INVALIDE_TOKEN, RESET_PASSWORD,
+        WRONG_EMAIL, INVALID_TOKEN, RESET_PASSWORD,
     }
 }

@@ -1,12 +1,8 @@
 package com.bridgelabz.usermanagement.controller;
 
 import com.bridgelabz.usermanagement.dto.LogInDTO;
-import com.bridgelabz.usermanagement.dto.TokenResponseDTO;
-import com.bridgelabz.usermanagement.model.User;
-import com.bridgelabz.usermanagement.model.UserData;
 import com.bridgelabz.usermanagement.response.Responce;
 import com.bridgelabz.usermanagement.service.IUserService;
-import com.bridgelabz.usermanagement.util.JWTTokenUtil;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
