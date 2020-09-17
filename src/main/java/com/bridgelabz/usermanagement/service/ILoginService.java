@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 
 import javax.mail.MessagingException;
 
-public interface IUserService {
+public interface ILoginService {
 
     ResponseEntity login(LogInDTO logInDTO);
 

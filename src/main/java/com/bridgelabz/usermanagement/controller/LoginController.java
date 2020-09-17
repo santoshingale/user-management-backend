@@ -2,7 +2,7 @@ package com.bridgelabz.usermanagement.controller;
 
 import com.bridgelabz.usermanagement.dto.LogInDTO;
 import com.bridgelabz.usermanagement.response.Responce;
-import com.bridgelabz.usermanagement.service.IUserService;
+import com.bridgelabz.usermanagement.service.ILoginService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +18,7 @@ import javax.mail.MessagingException;
 public class LoginController {
 
     @Autowired
-    IUserService iUserService;
+    ILoginService iLoginService;
 
     @PostMapping("/login")
     ResponseEntity<Responce> logInUser(@Valid @RequestBody LogInDTO logInDTO, BindingResult bindingResult) {
@@ -26,13 +26,13 @@ public class LoginController {
             return new ResponseEntity<Responce>(new Responce(HttpStatus.UNAUTHORIZED.value()
                     , bindingResult.getFieldErrors().get(0).getDefaultMessage()), HttpStatus.UNAUTHORIZED);
         }
-        return iUserService.login(logInDTO);
+        return iLoginService.login(logInDTO);
     }
 
     @GetMapping("/forgetpassword")
     ResponseEntity forgetPassword(@RequestParam("email") String email) throws MessagingException {
         if (!email.isEmpty()) {
-            iUserService.resetPassword(email);
+            iLoginService.resetPassword(email);
             return new ResponseEntity(new Responce(HttpStatus.OK.value(), "Verification link has been send to your email address"), HttpStatus.OK);
         }
         return new ResponseEntity(new Responce(HttpStatus.OK.value(), "email should not empty"), HttpStatus.BAD_REQUEST);

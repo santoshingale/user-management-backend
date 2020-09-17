@@ -1,6 +1,5 @@
 package com.bridgelabz.usermanagement.util;
 
-import com.bridgelabz.usermanagement.model.User;
 import com.bridgelabz.usermanagement.model.UserData;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -54,8 +53,8 @@ public class JWTTokenUtil implements Serializable {
                 .signWith(SignatureAlgorithm.HS512, secret).compact();
     }
 
-    public Boolean validateToken(String token, User user) {
+    public Boolean validateToken(String token, UserData user) {
         final String username = getUsernameFromToken(token);
-        return (username.equals(user.email) && !isTokenExpired(token));
+        return (username.equals(user.getEmail()) && !isTokenExpired(token));
     }
 }

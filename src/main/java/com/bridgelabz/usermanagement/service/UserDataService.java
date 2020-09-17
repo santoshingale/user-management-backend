@@ -7,6 +7,7 @@ import com.bridgelabz.usermanagement.model.UserPermission;
 import com.bridgelabz.usermanagement.repository.UserDataRepository;
 import com.bridgelabz.usermanagement.repository.UserPermissionRepo;
 import com.bridgelabz.usermanagement.response.Responce;
+import com.bridgelabz.usermanagement.util.JWTTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,10 @@ public class UserDataService {
     private UserPermissionRepo userPermissionRepo;
     @Autowired
     private FirebaseStorageStrategy firebaseStorageStrategy;
+    @Autowired
+    JWTTokenUtil jwtTokenUtil;
+
+    String profilePic="default_image.png";
 
     public ResponseEntity register(UserDataDTO userDataDTO, MultipartFile profilePic) throws IOException {
         if (userDataRepository.findByEmail(userDataDTO.email).isPresent()) {
@@ -64,7 +69,9 @@ public class UserDataService {
 
     @Transactional
     UserData saveUserData(UserDataDTO userDataDTO, MultipartFile pic) throws IOException {
-        String profilePic = firebaseStorageStrategy.uploadFile(pic);
+        if (pic != null) {
+            String profilePic = firebaseStorageStrategy.uploadFile(pic);
+        }
         UserPermission userPermission = userPermissionRepo.save(new UserPermission((userDataDTO)));
         UserData userData = new UserData(userDataDTO);
         userData.setProfilePic(profilePic);
@@ -110,5 +117,14 @@ public class UserDataService {
                 , "user deleted successfully"), HttpStatus.OK);
     }
 
+    public ResponseEntity handleLogout(Long id) {
+        userDataRepository.updateStatus(id, "Inactive");
+        return new ResponseEntity(new Responce(HttpStatus.OK.value()
+                , "sucessully"), HttpStatus.OK);
+    }
 
+    public ResponseEntity getUserDetails(String token) {
+        return new ResponseEntity(new Responce(HttpStatus.OK.value()
+                , "sucessully", userDataRepository.findByEmail(jwtTokenUtil.getUsernameFromToken(token.substring(7)))), HttpStatus.OK);
+    }
 }

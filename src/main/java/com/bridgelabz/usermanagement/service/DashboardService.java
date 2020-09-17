@@ -21,4 +21,14 @@ public class DashboardService {
         return new ResponseEntity(new Responce(HttpStatus.OK.value()
                 , "sucessully", userDataRepository.getInactiveUserCount()), HttpStatus.OK);
     }
+
+    public ResponseEntity getOnlineUser() {
+        return new ResponseEntity(new Responce(HttpStatus.OK.value()
+                , "sucessully", userDataRepository.getOnlineUserCount()), HttpStatus.OK);
+    }
+
+    public ResponseEntity getUserAscByRegistrationDate() {
+        return new ResponseEntity(new Responce(HttpStatus.OK.value()
+                , "sucessully", userDataRepository.getUserAscByRegistrationDate()), HttpStatus.OK);
+    }
 }

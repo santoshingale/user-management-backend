@@ -1,6 +1,7 @@
 package com.bridgelabz.usermanagement.controller;
 
 
+import com.bridgelabz.usermanagement.dto.UserDataDTO;
 import com.bridgelabz.usermanagement.model.UserData;
 import com.bridgelabz.usermanagement.repository.UserDataRepository;
 import com.bridgelabz.usermanagement.response.Responce;
@@ -25,6 +26,21 @@ public class UserController {
 
     @Autowired
     UserDataRepository userDataRepository;
+
+    @PostMapping(value = "/register", consumes = {"multipart/form-data"})
+    @ResponseBody
+    public ResponseEntity<Responce> addUser(@Valid @RequestPart("register") UserDataDTO update, @RequestPart(value = "profilePic", required = false) MultipartFile profilePic, BindingResult bindingResult) throws IOException {
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity<Responce>(new Responce(HttpStatus.UNAUTHORIZED.value()
+                    , bindingResult.getFieldErrors().get(0).getDefaultMessage()), HttpStatus.UNAUTHORIZED);
+        }
+        return userDataService.register(update, profilePic);
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity getUserDetails(@RequestHeader("token") String token) {
+        return userDataService.getUserDetails(token);
+    }
 
     @GetMapping("/count")
     public ResponseEntity getNoOfUsers() {
@@ -81,8 +97,8 @@ public class UserController {
         return userDataService.update(userData, profilePic);
     }
 
-    @GetMapping("/registation/month/count")
-    public ResponseEntity<Responce> getRegistrationInMonth() {
-        return userDataRepository.getMonthRegistrationRecords();
+    @PostMapping("/logout")
+    public ResponseEntity logout(@RequestParam(required = false) Long id){
+        return userDataService.handleLogout(id);
     }
 }

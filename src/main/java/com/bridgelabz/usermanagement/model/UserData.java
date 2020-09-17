@@ -4,10 +4,7 @@ import com.bridgelabz.usermanagement.dto.UserDataDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -18,6 +15,7 @@ import java.util.Date;
 @Setter
 @Getter
 @NoArgsConstructor
+@Data
 public class UserData {
 
     @Id
@@ -80,6 +78,10 @@ public class UserData {
 
     @Column(columnDefinition = "int default 0")
     private Integer worongLoginAttempt;
+
+    @Column(columnDefinition = "varchar(10) default 'Inactive'")
+    @Pattern(regexp = " ^(?:Active|Inactive)$", message = "Enter Valid Gender")
+    private String status;
 
     @OneToOne(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinColumn(name = "permission_id", referencedColumnName = "id")

@@ -25,7 +25,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 @Service
-public class LoginService implements IUserService {
+public class LoginService implements ILoginService {
 
     @Autowired
     UserDataRepository userDataRepository;
@@ -42,7 +42,6 @@ public class LoginService implements IUserService {
     @Autowired
     RabbitMQSender rabbitMQSender;
 
-
     private ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     @Override
@@ -56,9 +55,10 @@ public class LoginService implements IUserService {
                 throw new LoginException("pls reset your password", LoginException.ExceptionType.RESET_PASSWORD, HttpStatus.UNAUTHORIZED.value());
             }
             UserData userData = byEmail.get();
+            userDataRepository.updateStatus(userData.getId(), "Active");
             String token = jwtTokenUtil.generateToken(userData);
             userDataRepository.updateLoginDetails(byEmail.get().getId(), LocalDateTime.now());
-            return new ResponseEntity(new Responce(HttpStatus.OK.value(), "Successfully login", new TokenResponseDTO(token)), HttpStatus.OK);
+            return new ResponseEntity(new Responce(HttpStatus.OK.value(), "Successfully login", new TokenResponseDTO(token, userData)), HttpStatus.OK);
         }
 
         userDataRepository.updateWrongAttempts(byEmail.get().getId(), byEmail.get().getWorongLoginAttempt() + 1);

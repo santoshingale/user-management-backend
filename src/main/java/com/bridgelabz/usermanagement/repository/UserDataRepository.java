@@ -48,9 +48,17 @@ public interface UserDataRepository extends JpaRepository<UserData, Long> {
     @Query(value = "update user_data set worong_login_attempt = 0, last_login = :loginTime where id = :id", nativeQuery = true)
     void updateLoginDetails(@Param("id") Long id, @Param("loginTime") LocalDateTime loginTime);
 
-    @Query(value = "SELECT count(*),MONTH(registration_date),year(registration_date) FROM userDetails.user_data WHERE YEAR(registration_date) = 2020 GROUP BY MONTH(registration_date),year(registration_date)", nativeQuery = true)
-    List getMonthRegistrationRecords();
+    @Modifying
+    @Transactional
+    @Query(value = "update user_data set status = :status where id = :id", nativeQuery = true)
+    void updateStatus(@Param("id") Long id, @Param("status") String status);
 
     @Query(value = "SELECT * FROM user_data ORDER BY registration_date DESC LIMIT 10", nativeQuery = true)
     List<UserData> getRecentTegistration();
+
+    @Query(value = "select count(*) from user_data where status ='Active'", nativeQuery = true)
+    Integer getOnlineUserCount();
+
+    @Query(value = "select * from user_data order by registration_date ASC", nativeQuery = true)
+    List<UserData> getUserAscByRegistrationDate();
 }

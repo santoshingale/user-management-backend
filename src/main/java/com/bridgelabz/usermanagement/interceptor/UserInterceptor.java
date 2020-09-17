@@ -1,6 +1,6 @@
 package com.bridgelabz.usermanagement.interceptor;
 
-import com.bridgelabz.usermanagement.service.IUserService;
+import com.bridgelabz.usermanagement.service.ILoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 public class UserInterceptor implements HandlerInterceptor {
 
     @Autowired
-    IUserService userService;
+    ILoginService userService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
