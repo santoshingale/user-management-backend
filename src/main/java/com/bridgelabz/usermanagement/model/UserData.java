@@ -21,6 +21,7 @@ public class UserData {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     @NotNull
     @Pattern(regexp = "^[a-zA-Z]{3,20}$", message = "Enter Valid FistName")
     private String firstname;
@@ -32,7 +33,6 @@ public class UserData {
     @NotNull
     @Pattern(regexp = "^[a-zA-Z]{3,20}$", message = "Enter Valid LastName")
     private String lastname;
-
 
     private Date dateOfBirth;
 

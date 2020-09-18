@@ -1,15 +1,18 @@
 package com.bridgelabz.usermanagement.service;
 
 import com.bridgelabz.usermanagement.helper.FirebaseCredential;
+import com.bridgelabz.usermanagement.response.Responce;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.ReadChannel;
 import com.google.cloud.storage.*;
+import jakarta.validation.constraints.NotNull;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -54,18 +57,26 @@ public class FirebaseStorageStrategy {
         BlobInfo blobInfo = BlobInfo.newBuilder(blobId).build();
         Blob blob = storage.create(blobInfo, Files.readAllBytes(filePath));
 
-        return new String(objectName);
+        return objectName;
     }
 
 
     public ResponseEntity<Object> downloadFile(String fileName) throws Exception {
+
+        if (fileName.equals("undefined")) {
+            return new ResponseEntity(new Responce(HttpStatus.NOT_FOUND.value()
+                    , "no image found"), HttpStatus.NOT_FOUND);
+        }
+        System.out.println(fileName);
         Storage storage = storageOptions.getService();
 
         Blob blob = storage.get(BlobId.of(bucketName, fileName));
+
         ReadChannel reader = blob.reader();
+
         InputStream inputStream = Channels.newInputStream(reader);
 
-        byte[] content = null;
+        byte[] content;
 
         content = IOUtils.toByteArray(inputStream);
 

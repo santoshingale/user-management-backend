@@ -49,7 +49,7 @@ public class UserDataService {
         return new ResponseEntity(new Responce(HttpStatus.OK.value(), "sucessully submited", saveUserData(userDataDTO, profilePic)), HttpStatus.OK);
     }
 
-    public ResponseEntity update(UserData userData, MultipartFile... profilePic) throws IOException {
+    public ResponseEntity update(UserData userData, MultipartFile profilePic) throws IOException {
 
         Optional<UserData> byId = userDataRepository.findById(userData.getId());
         if (byId.isEmpty()) {
@@ -59,8 +59,8 @@ public class UserDataService {
         userData.setRegistrationDate(userData1.getRegistrationDate());
         userData.setProfilePic(userData1.getProfilePic());
         userData.setLastUpdate(LocalDateTime.now());
-        if (profilePic.length != 0) {
-            userData.setProfilePic(firebaseStorageStrategy.uploadFile(profilePic[0]));
+        if (profilePic != null) {
+            userData.setProfilePic(firebaseStorageStrategy.uploadFile(profilePic));
         }
         userDataRepository.deleteById(userData.getId());
         userPermissionRepo.deleteById(userData.getUserPermission().getId());

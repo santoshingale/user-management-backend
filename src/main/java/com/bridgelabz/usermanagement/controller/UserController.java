@@ -28,7 +28,6 @@ public class UserController {
     UserDataRepository userDataRepository;
 
     @PostMapping(value = "/register", consumes = {"multipart/form-data"})
-    @ResponseBody
     public ResponseEntity<Responce> addUser(@Valid @RequestPart("register") UserDataDTO update, @RequestPart(value = "profilePic", required = false) MultipartFile profilePic, BindingResult bindingResult) throws IOException {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<Responce>(new Responce(HttpStatus.UNAUTHORIZED.value()
@@ -77,19 +76,17 @@ public class UserController {
         return userDataService.deleteUser(id);
     }
 
-    @PostMapping(value = "/update")
-    @ResponseBody
-    public ResponseEntity<Responce> updateUser(@Valid @RequestPart("update") UserData userData, BindingResult bindingResult) throws IOException {
-        if (bindingResult.hasErrors()) {
-            return new ResponseEntity<Responce>(new Responce(HttpStatus.UNAUTHORIZED.value()
-                    , bindingResult.getFieldErrors().get(0).getDefaultMessage()), HttpStatus.UNAUTHORIZED);
-        }
-        return userDataService.update(userData);
-    }
+//    @PostMapping(value = "/update")
+//    public ResponseEntity<Responce> updateUser(@Valid @RequestPart("update") UserData userData, BindingResult bindingResult) throws IOException {
+//        if (bindingResult.hasErrors()) {
+//            return new ResponseEntity<Responce>(new Responce(HttpStatus.UNAUTHORIZED.value()
+//                    , bindingResult.getFieldErrors().get(0).getDefaultMessage()), HttpStatus.UNAUTHORIZED);
+//        }
+//        return userDataService.update(userData);
+//    }
 
     @PostMapping(value = "/update", consumes = {"multipart/form-data"})
-    @ResponseBody
-    public ResponseEntity<Responce> updateUserWIthProfilePic(@Valid @RequestPart("update") UserData userData, @RequestPart("profilePic") MultipartFile profilePic, BindingResult bindingResult) throws IOException {
+    public ResponseEntity<Responce> updateUserWIthProfilePic(@Valid @RequestPart("update") UserData userData, @RequestPart(value = "profilePic",required = false) MultipartFile profilePic, BindingResult bindingResult) throws IOException {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<Responce>(new Responce(HttpStatus.UNAUTHORIZED.value()
                     , bindingResult.getFieldErrors().get(0).getDefaultMessage()), HttpStatus.UNAUTHORIZED);
