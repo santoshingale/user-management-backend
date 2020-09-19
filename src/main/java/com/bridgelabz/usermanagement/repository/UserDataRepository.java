@@ -46,11 +46,6 @@ public interface UserDataRepository extends JpaRepository<UserData, Long> {
 
     @Modifying
     @Transactional
-    @Query(value = "update user_data set worong_login_attempt = 0, last_login = :loginTime where id = :id", nativeQuery = true)
-    void updateLoginDetails(@Param("id") Long id, @Param("loginTime") LocalDateTime loginTime);
-
-    @Modifying
-    @Transactional
     @Query(value = "update user_data set status = :status where id = :id", nativeQuery = true)
     void updateStatus(@Param("id") Long id, @Param("status") String status);
 

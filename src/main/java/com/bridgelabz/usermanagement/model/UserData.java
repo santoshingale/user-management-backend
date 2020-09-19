@@ -8,7 +8,9 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @ToString
@@ -74,7 +76,9 @@ public class UserData {
 
     private LocalDateTime lastUpdate;
 
-    private LocalDateTime lastLogin;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name="last_login_id",referencedColumnName = "id")
+    private List<LoginHistory> lastLogin;
 
     @Column(columnDefinition = "int default 0")
     private Integer worongLoginAttempt;

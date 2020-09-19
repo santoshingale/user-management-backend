@@ -67,7 +67,6 @@ public class FirebaseStorageStrategy {
             return new ResponseEntity(new Responce(HttpStatus.NOT_FOUND.value()
                     , "no image found"), HttpStatus.NOT_FOUND);
         }
-        System.out.println(fileName);
         Storage storage = storageOptions.getService();
 
         Blob blob = storage.get(BlobId.of(bucketName, fileName));

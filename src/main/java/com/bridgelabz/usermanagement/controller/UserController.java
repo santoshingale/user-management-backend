@@ -76,14 +76,6 @@ public class UserController {
         return userDataService.deleteUser(id);
     }
 
-//    @PostMapping(value = "/update")
-//    public ResponseEntity<Responce> updateUser(@Valid @RequestPart("update") UserData userData, BindingResult bindingResult) throws IOException {
-//        if (bindingResult.hasErrors()) {
-//            return new ResponseEntity<Responce>(new Responce(HttpStatus.UNAUTHORIZED.value()
-//                    , bindingResult.getFieldErrors().get(0).getDefaultMessage()), HttpStatus.UNAUTHORIZED);
-//        }
-//        return userDataService.update(userData);
-//    }
 
     @PostMapping(value = "/update", consumes = {"multipart/form-data"})
     public ResponseEntity<Responce> updateUserWIthProfilePic(@Valid @RequestPart("update") UserData userData, @RequestPart(value = "profilePic",required = false) MultipartFile profilePic, BindingResult bindingResult) throws IOException {

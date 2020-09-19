@@ -46,7 +46,7 @@ public class UserDataService {
         if (userDataRepository.findByPhoneext(userDataDTO.phoneext).isPresent()) {
             throw new RegisterException("phone already registered with us", RegisterException.ExceptionType.NUMBER_ALREADY_EXIST, HttpStatus.BAD_REQUEST.value());
         }
-        return new ResponseEntity(new Responce(HttpStatus.OK.value(), "sucessully submited", saveUserData(userDataDTO, profilePic)), HttpStatus.OK);
+        return new ResponseEntity(new Responce(HttpStatus.OK.value(), "successful submited", saveUserData(userDataDTO, profilePic)), HttpStatus.OK);
     }
 
     public ResponseEntity update(UserData userData, MultipartFile profilePic) throws IOException {
@@ -64,7 +64,7 @@ public class UserDataService {
         }
         userDataRepository.deleteById(userData.getId());
         userPermissionRepo.deleteById(userData.getUserPermission().getId());
-        return new ResponseEntity(new Responce(HttpStatus.OK.value(), "sucessully submited", userDataRepository.save(userData)), HttpStatus.OK);
+        return new ResponseEntity(new Responce(HttpStatus.OK.value(), "successful submited", userDataRepository.save(userData)), HttpStatus.OK);
     }
 
     @Transactional
@@ -85,26 +85,26 @@ public class UserDataService {
     public ResponseEntity getUserCount(String... attribute) {
         if (attribute.length == 0) {
             return new ResponseEntity(new Responce(HttpStatus.OK.value()
-                    , "sucessully", userDataRepository.getCountOfUser()), HttpStatus.OK);
+                    , "successful", userDataRepository.getCountOfUser()), HttpStatus.OK);
         }
         return new ResponseEntity(new Responce(HttpStatus.OK.value()
-                , "sucessully", userDataRepository.getCountOfSearchUser(attribute[0])), HttpStatus.OK);
+                , "successful", userDataRepository.getCountOfSearchUser(attribute[0])), HttpStatus.OK);
     }
 
 
     public ResponseEntity getUserList(Integer listSize, Integer pagenumber) {
         return new ResponseEntity(new Responce(HttpStatus.OK.value()
-                , "sucessully", userDataRepository.getUserDataForList(((pagenumber * listSize) - listSize), listSize)), HttpStatus.OK);
+                , "successful", userDataRepository.getUserDataForList(((pagenumber * listSize) - listSize), listSize)), HttpStatus.OK);
     }
 
     public ResponseEntity getUserListBySearchKey(Integer listSize, Integer pagenumber, String searchKey) {
         return new ResponseEntity(new Responce(HttpStatus.OK.value()
-                , "sucessully", userDataRepository.getUserDataForListWithSearch(((pagenumber * listSize) - listSize), listSize, searchKey)), HttpStatus.OK);
+                , "successful", userDataRepository.getUserDataForListWithSearch(((pagenumber * listSize) - listSize), listSize, searchKey)), HttpStatus.OK);
     }
 
     public ResponseEntity getRecentRegistrationList() {
         return new ResponseEntity(new Responce(HttpStatus.OK.value()
-                , "sucessully", userDataRepository.getRecentTegistration()), HttpStatus.OK);
+                , "successful", userDataRepository.getRecentTegistration()), HttpStatus.OK);
     }
 
     public ResponseEntity getProfilePic(String imageName) throws Exception {
@@ -120,11 +120,11 @@ public class UserDataService {
     public ResponseEntity handleLogout(Long id) {
         userDataRepository.updateStatus(id, "Inactive");
         return new ResponseEntity(new Responce(HttpStatus.OK.value()
-                , "sucessully"), HttpStatus.OK);
+                , "successful"), HttpStatus.OK);
     }
 
     public ResponseEntity getUserDetails(String token) {
         return new ResponseEntity(new Responce(HttpStatus.OK.value()
-                , "sucessully", userDataRepository.findByEmail(jwtTokenUtil.getUsernameFromToken(token.substring(7)))), HttpStatus.OK);
+                , "successful", userDataRepository.findByEmail(jwtTokenUtil.getUsernameFromToken(token.substring(7)))), HttpStatus.OK);
     }
 }

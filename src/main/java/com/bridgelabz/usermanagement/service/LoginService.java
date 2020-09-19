@@ -4,6 +4,7 @@ import com.bridgelabz.usermanagement.dto.LogInDTO;
 import com.bridgelabz.usermanagement.dto.TokenResponseDTO;
 import com.bridgelabz.usermanagement.exception.LoginException;
 import com.bridgelabz.usermanagement.model.Email;
+import com.bridgelabz.usermanagement.model.LoginHistory;
 import com.bridgelabz.usermanagement.model.UserData;
 import com.bridgelabz.usermanagement.repository.UserDataRepository;
 import com.bridgelabz.usermanagement.response.Responce;
@@ -15,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import java.time.LocalDateTime;
@@ -45,6 +47,7 @@ public class LoginService implements ILoginService {
     private ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     @Override
+    @Transactional
     public ResponseEntity login(LogInDTO logInDTO) {
         Optional<UserData> byEmail = userDataRepository.findByEmail(logInDTO.email);
         if (!byEmail.isPresent()) {
@@ -55,12 +58,13 @@ public class LoginService implements ILoginService {
                 throw new LoginException("pls reset your password", LoginException.ExceptionType.RESET_PASSWORD, HttpStatus.UNAUTHORIZED.value());
             }
             UserData userData = byEmail.get();
-            userDataRepository.updateStatus(userData.getId(), "Active");
             String token = jwtTokenUtil.generateToken(userData);
-            userDataRepository.updateLoginDetails(byEmail.get().getId(), LocalDateTime.now());
+            userData.setStatus("Active");
+            userData.getLastLogin().add(new LoginHistory(LocalDateTime.now()));
+            userData.setWorongLoginAttempt(0);
+            userDataRepository.save(userData);
             return new ResponseEntity(new Responce(HttpStatus.OK.value(), "Successfully login", new TokenResponseDTO(token, userData)), HttpStatus.OK);
         }
-
         userDataRepository.updateWrongAttempts(byEmail.get().getId(), byEmail.get().getWorongLoginAttempt() + 1);
         throw new LoginException("Incorrect password", LoginException.ExceptionType.WRONG_EMAIL, HttpStatus.UNAUTHORIZED.value());
     }
