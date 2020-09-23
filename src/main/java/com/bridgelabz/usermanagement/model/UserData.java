@@ -8,7 +8,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -76,8 +75,8 @@ public class UserData {
 
     private LocalDateTime lastUpdate;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name="last_login_id",referencedColumnName = "id")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinColumn(name = "last_login_id", referencedColumnName = "id")
     private List<LoginHistory> lastLogin;
 
     @Column(columnDefinition = "int default 0")

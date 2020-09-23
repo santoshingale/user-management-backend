@@ -10,6 +10,7 @@ import com.bridgelabz.usermanagement.repository.UserDataRepository;
 import com.bridgelabz.usermanagement.response.Responce;
 import com.bridgelabz.usermanagement.util.JWTTokenUtil;
 import io.jsonwebtoken.ExpiredJwtException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +27,7 @@ import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
+@Slf4j
 @Service
 public class LoginService implements ILoginService {
 
@@ -63,7 +65,7 @@ public class LoginService implements ILoginService {
             userData.getLastLogin().add(new LoginHistory(LocalDateTime.now()));
             userData.setWorongLoginAttempt(0);
             userDataRepository.save(userData);
-            return new ResponseEntity(new Responce(HttpStatus.OK.value(), "Successfully login", new TokenResponseDTO(token, userData)), HttpStatus.OK);
+            return new ResponseEntity(new Responce(HttpStatus.OK.value(), "Successfully login", new TokenResponseDTO(token)), HttpStatus.OK);
         }
         userDataRepository.updateWrongAttempts(byEmail.get().getId(), byEmail.get().getWorongLoginAttempt() + 1);
         throw new LoginException("Incorrect password", LoginException.ExceptionType.WRONG_EMAIL, HttpStatus.UNAUTHORIZED.value());
@@ -71,22 +73,24 @@ public class LoginService implements ILoginService {
 
     @Override
     public boolean verifyJWTToken(String token) {
-        System.out.println(token);
         String jwtToken, userEmail = null;
         Date expirationTime = null;
         if (token != null && token.startsWith("Bearer ")) {
             jwtToken = token.substring(7);
             try {
                 userEmail = jwtTokenUtil.getUsernameFromToken(jwtToken);
-                expirationTime = jwtTokenUtil.getExpirationDateFromToken(jwtToken);
             } catch (IllegalArgumentException e) {
-                System.out.println("Unable to get JWT Token");
+                log.info("Unable to get JWT Token");
             } catch (ExpiredJwtException e) {
-                System.out.println("JWT Token has expired");
+                log.info("JWT Token has expired");
             }
         }
-        if (userEmail != null && userDataRepository.findByEmail(userEmail).isPresent() && expirationTime.after(new Date())) {
-            return true;
+
+        Optional<UserData> byEmail = userDataRepository.findByEmail(userEmail);
+        if (userEmail != null && byEmail.isPresent()) {
+            if (jwtTokenUtil.validateToken(token.substring(7), byEmail.get()))
+                return true;
+            return false;
         }
         throw new LoginException("Invalid token", LoginException.ExceptionType.INVALID_TOKEN, HttpStatus.UNAUTHORIZED.value());
     }

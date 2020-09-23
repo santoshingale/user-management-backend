@@ -1,6 +1,8 @@
 package com.bridgelabz.usermanagement.model;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +12,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Data
+@Getter
+@Setter
 public class LoginHistory {
 
     @Id

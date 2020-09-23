@@ -37,7 +37,7 @@ public class UserController {
     }
 
     @GetMapping("/info")
-    public ResponseEntity getUserDetails(@RequestHeader("token") String token) {
+    public ResponseEntity<Responce> getUserDetails(@RequestHeader(value = "token", required = false) String token) {
         return userDataService.getUserDetails(token);
     }
 
@@ -78,7 +78,7 @@ public class UserController {
 
 
     @PostMapping(value = "/update", consumes = {"multipart/form-data"})
-    public ResponseEntity<Responce> updateUserWIthProfilePic(@Valid @RequestPart("update") UserData userData, @RequestPart(value = "profilePic",required = false) MultipartFile profilePic, BindingResult bindingResult) throws IOException {
+    public ResponseEntity<Responce> updateUserWIthProfilePic(@Valid @RequestPart("update") UserData userData, @RequestPart(value = "profilePic", required = false) MultipartFile profilePic, BindingResult bindingResult) throws IOException {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<Responce>(new Responce(HttpStatus.UNAUTHORIZED.value()
                     , bindingResult.getFieldErrors().get(0).getDefaultMessage()), HttpStatus.UNAUTHORIZED);
@@ -87,7 +87,7 @@ public class UserController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity logout(@RequestParam(required = false) Long id){
+    public ResponseEntity logout(@RequestParam(required = false) Long id) {
         return userDataService.handleLogout(id);
     }
 }

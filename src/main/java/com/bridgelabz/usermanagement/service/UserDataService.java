@@ -26,15 +26,14 @@ public class UserDataService {
     @Autowired
     PasswordEncoder passwordEncoder;
     @Autowired
+    JWTTokenUtil jwtTokenUtil;
+    String profilePic = "default_image.png";
+    @Autowired
     private UserDataRepository userDataRepository;
     @Autowired
     private UserPermissionRepo userPermissionRepo;
     @Autowired
     private FirebaseStorageStrategy firebaseStorageStrategy;
-    @Autowired
-    JWTTokenUtil jwtTokenUtil;
-
-    String profilePic="default_image.png";
 
     public ResponseEntity register(UserDataDTO userDataDTO, MultipartFile profilePic) throws IOException {
         if (userDataRepository.findByEmail(userDataDTO.email).isPresent()) {
