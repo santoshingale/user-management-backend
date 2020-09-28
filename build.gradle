@@ -39,6 +39,9 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-amqp', version: '2.3.3.RELEASE'
     compile group: 'com.google.firebase', name: 'firebase-admin', version: '6.14.0'
     compile group: 'commons-io', name: 'commons-io', version: '2.5'
+    compile group: 'org.springframework.data', name: 'spring-data-elasticsearch', version: '4.0.4.RELEASE'
+    compile group: 'org.elasticsearch.client', name: 'transport', version: '7.9.1'
+    testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
 }
 
 test {

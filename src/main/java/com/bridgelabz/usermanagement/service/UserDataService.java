@@ -1,6 +1,7 @@
 package com.bridgelabz.usermanagement.service;
 
 import com.bridgelabz.usermanagement.dto.UserDataDTO;
+import com.bridgelabz.usermanagement.elastic.UserDataElasticRepo;
 import com.bridgelabz.usermanagement.exception.RegisterException;
 import com.bridgelabz.usermanagement.model.UserData;
 import com.bridgelabz.usermanagement.model.UserPermission;
@@ -9,6 +10,9 @@ import com.bridgelabz.usermanagement.repository.UserPermissionRepo;
 import com.bridgelabz.usermanagement.response.Responce;
 import com.bridgelabz.usermanagement.util.JWTTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +34,8 @@ public class UserDataService {
     String profilePic = "default_image.png";
     @Autowired
     private UserDataRepository userDataRepository;
+    @Autowired
+    private UserDataElasticRepo userDataElasticRepo;
     @Autowired
     private UserPermissionRepo userPermissionRepo;
     @Autowired
@@ -97,8 +103,10 @@ public class UserDataService {
     }
 
     public ResponseEntity getUserListBySearchKey(Integer listSize, Integer pagenumber, String searchKey) {
+        Pageable page = PageRequest.of(pagenumber-1, listSize);
+
         return new ResponseEntity(new Responce(HttpStatus.OK.value()
-                , "successful", userDataRepository.getUserDataForListWithSearch(((pagenumber * listSize) - listSize), listSize, searchKey)), HttpStatus.OK);
+                , "successful", userDataElasticRepo.customSearch(searchKey,page)), HttpStatus.OK);
     }
 
     public ResponseEntity getRecentRegistrationList() {

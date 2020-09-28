@@ -5,18 +5,22 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
+import org.springframework.data.elasticsearch.annotations.DateFormat;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
+@Document(indexName = "cmid", shards = 2)
 @Entity
 @ToString
-@Setter
-@Getter
 @NoArgsConstructor
 @Data
+@AllArgsConstructor
 public class UserData {
 
     @Id
@@ -35,6 +39,7 @@ public class UserData {
     @Pattern(regexp = "^[a-zA-Z]{3,20}$", message = "Enter Valid LastName")
     private String lastname;
 
+    @Field(type = FieldType.Date, format = DateFormat.basic_date_time)
     private Date dateOfBirth;
 
     @NotNull
@@ -71,10 +76,13 @@ public class UserData {
 
     private String profilePic;
 
+    @Field(type = FieldType.Date, format = DateFormat.basic_date_time)
     private LocalDateTime registrationDate;
 
+    @Field(type = FieldType.Date, format = DateFormat.basic_date_time)
     private LocalDateTime lastUpdate;
 
+    @Field(type = FieldType.Nested, includeInParent = true)
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "last_login_id", referencedColumnName = "id")
     private List<LoginHistory> lastLogin;

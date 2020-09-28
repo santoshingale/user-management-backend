@@ -1,7 +1,7 @@
 package com.bridgelabz.usermanagement.controller;
 
-
 import com.bridgelabz.usermanagement.dto.UserDataDTO;
+import com.bridgelabz.usermanagement.elastic.UserDataElasticRepo;
 import com.bridgelabz.usermanagement.model.UserData;
 import com.bridgelabz.usermanagement.repository.UserDataRepository;
 import com.bridgelabz.usermanagement.response.Responce;
@@ -26,6 +26,9 @@ public class UserController {
 
     @Autowired
     UserDataRepository userDataRepository;
+
+    @Autowired
+    UserDataElasticRepo userDataElasticRepo;
 
     @PostMapping(value = "/register", consumes = {"multipart/form-data"})
     public ResponseEntity<Responce> addUser(@Valid @RequestPart("register") UserDataDTO update, @RequestPart(value = "profilePic", required = false) MultipartFile profilePic, BindingResult bindingResult) throws IOException {
